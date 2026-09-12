@@ -1,0 +1,59 @@
+{
+  "name": "arbiter402",
+  "version": "1.0.0",
+  "description": "Sub-Second Conditional Escrow & Ground-Truth Adjudication for the Machine Economy",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run contracts/scripts/deploy.ts --network localhost",
+    "deploy:hedera": "hardhat run contracts/scripts/deploy.ts --network hedera_testnet",
+    "seed": "hardhat run contracts/scripts/seedDemo.ts --network hedera_testnet",
+    "sim": "ts-node agents/runSimulation.ts",
+    "sim:honest": "ts-node agents/sellerAgent.ts --mode=honest",
+    "sim:rogue": "ts-node agents/sellerAgent.ts --mode=rogue",
+    "referee": "ts-node referee/refereeService.ts",
+    "mcp": "ts-node referee/mcpRecipe.ts"
+  },
+  "keywords": [
+    "hedera",
+    "the-graph",
+    "bazantic",
+    "x402",
+    "erc-8004",
+    "ai-agents",
+    "agentic-payments",
+    "dispute-arbitration",
+    "hcs"
+  ],
+  "author": "Blockspade Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": ">=9.1.0",
+    "@types/node": ">=18.0.0",
+    "chai": "^4.3.7",
+    "ethers": "^6.10.0",
+    "hardhat": "^2.22.0",
+    "hardhat-gas-reporter": "^1.0.8",
+    "solidity-coverage": "^0.8.1",
+    "ts-node": ">=8.0.0",
+    "typechain": "^8.3.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@hashgraph/sdk": "^2.58.0",
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "viem": "^2.21.0"
+  }
+}
