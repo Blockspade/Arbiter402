@@ -91,20 +91,39 @@ Arbiter402 executes its micro-escrow smart contracts on **Hedera EVM (Chain ID: 
 
 ### 2. Zero-Hallucination Adjudication (The Graph)
 Arbiter402 replaces fallible LLM judges with **deterministic mathematical invariant verification** powered by **The Graph's decentralized network**:
-- For DeFi analytics (e.g. Volume-Weighted Average Price over block range $[b_{\text{start}}, b_{\text{end}}]$), the referee queries verified onchain swap events directly from The Graph's decentralized subgraphs:
-  $$\text{VWAP}_{\text{true}} = \frac{\sum_{i=1}^N (P_i \times V_i)}{\sum_{i=1}^N V_i}$$
-- The referee compares the seller agent's submitted deliverable $\mu_{\text{seller}}$ against $\text{VWAP}_{\text{true}}$ using basis points tolerance ($\text{toleranceBps}$):
-  $$\delta = \frac{|\mu_{\text{seller}} - \text{VWAP}_{\text{true}}|}{\text{VWAP}_{\text{true}}}$$
-- If $\delta > \frac{\text{toleranceBps}}{10000}$, the deliverable is mathematically proven invalid. The verdict is binary, verifiable, and immune to prompt injection.
+
+#### Generalized Verification Architecture vs. Canonical Reference Domain
+- **Generalized Protocol Framework**: The Arbiter402 dispute engine is designed to be domain-agnostic. The protocol can adjudicate any autonomous computational deliverable where a verifiable invariant exists—such as Zero-Knowledge execution proofs (ZKML), cryptographic state commitments, or multi-party deterministic consensus.
+- **Why We Target DeFi Analytics in this Implementation**: High-frequency financial data represents the most capital-critical and time-sensitive workload in the machine economy. When autonomous portfolio agents request historical analytics, standard LLMs suffer from subtle, plausible-sounding numerical hallucinations. Even a 2% price deviation can cause severe slippage or failed liquidations in automated execution. 
+- **The Graph as Ground-Truth Oracle**: Instead of trusting an offchain API or another subjective LLM, the referee reconstructs the mathematical ground truth directly from raw, immutable onchain swap event logs indexed by The Graph's decentralized network.
+
+#### The Mathematical Invariant Formulation:
+For an agreed block range $[b_{\text{start}}, b_{\text{end}}]$ and pool, the referee queries verified onchain swap events directly from The Graph's decentralized subgraphs:
+
+$$
+\text{VWAP}_{\text{true}} = \frac{\sum_{i=1}^{N} (P_i \times V_i)}{\sum_{i=1}^{N} V_i}
+$$
+
+The referee then evaluates the seller agent's submitted deliverable $\mu_{\text{seller}}$ against $\text{VWAP}_{\text{true}}$ using the agreed basis points tolerance ($\text{toleranceBps}$):
+
+$$
+\delta = \frac{\left| \mu_{\text{seller}} - \text{VWAP}_{\text{true}} \right|}{\text{VWAP}_{\text{true}}}
+$$
+
+If $\delta > \frac{\text{toleranceBps}}{10000}$, the deliverable is mathematically proven invalid. The verdict is binary, verifiable, and immune to prompt injection.
 
 ### 3. Economic Deterrence & Credit Scoring (ERC-8004)
 Through [`contracts/ERC8004ReputationRegistry.sol`](contracts/ERC8004ReputationRegistry.sol), Arbiter402 gives AI agents an onchain credit score:
 - **Baseline Score**: All agents initialize at `100 points`.
 - **Trust Compounding**: Each verified honest delivery awards `+5 reputation points`.
 - **Autonomous Slashing**: Delivering defective or fraudulent data triggers an atomic penalty of `-50 points` and increments the onchain slash counter.
-- **Mathematical Deterrence**: The expected value of cheating becomes strictly negative:
-  $$\mathbb{E}[V] = P(\text{cheat}) \cdot R_{\text{escrow}} - P(\text{dispute}) \cdot C_{\text{slash}} < 0$$
-  Agents with low reputation scores are autonomously excluded by buyer agent risk thresholds.
+- **Mathematical Deterrence**: The expected value of attempting to cheat or submit hallucinated data becomes strictly negative:
+
+$$
+\mathbb{E}[V] = P(\text{cheat}) \cdot R_{\text{escrow}} - P(\text{dispute}) \cdot C_{\text{slash}} < 0
+$$
+
+Agents with depleted reputation scores are autonomously excluded by buyer agent risk thresholds.
 
 ### 4. Permanent Auditable Truth (Hedera Consensus Service)
 Every dispute adjudication generates a cryptographically signed audit proof anchored to **Hedera Consensus Service (HCS)** (Topic [`0.0.10520952`](https://hashscan.io/testnet/topic/0.0.10520952)):
