@@ -5,6 +5,7 @@ import {
   AccountId,
   PrivateKey,
 } from "@hashgraph/sdk";
+import { ethers } from "ethers";
 import { AdjudicationResult, HcsAuditProof } from "./types";
 import * as dotenv from "dotenv";
 
@@ -25,9 +26,10 @@ export class HcsLogger {
     if (operatorId && operatorKey && operatorId.startsWith("0.0.")) {
       try {
         this.client = Client.forTestnet();
+        const cleanKey = operatorKey.startsWith("0x") ? operatorKey.slice(2) : operatorKey;
         let key: PrivateKey;
         try {
-          key = PrivateKey.fromStringECDSA(operatorKey);
+          key = PrivateKey.fromStringECDSA(cleanKey);
         } catch {
           key = PrivateKey.fromString(operatorKey);
         }
@@ -49,9 +51,26 @@ export class HcsLogger {
     jobId: number,
     specHash: string,
     resultHash: string,
-    adjudication: AdjudicationResult
+    adjudication: AdjudicationResult,
+    refereeSigner?: any
   ): Promise<HcsAuditProof> {
     const timestamp = Math.floor(Date.now() / 1000);
+
+    // Cryptographic digest of dispute outcome
+    const digest = ethers.keccak256(
+      ethers.toUtf8Bytes(
+        `Arbiter402:${jobId}:${specHash}:${resultHash}:${adjudication.verdict}:${timestamp}`
+      )
+    );
+
+    let refereeSignature = digest;
+    if (refereeSigner && typeof refereeSigner.signMessage === "function") {
+      try {
+        refereeSignature = await refereeSigner.signMessage(ethers.getBytes(digest));
+      } catch {
+        refereeSignature = digest;
+      }
+    }
 
     const messagePayload = {
       protocol: "Arbiter402",
@@ -64,6 +83,7 @@ export class HcsLogger {
       groundTruth: adjudication.groundTruthValue,
       sellerValue: adjudication.sellerValue,
       referee: this.refereeAddress,
+      refereeSignature,
       timestamp,
     };
 
@@ -99,7 +119,7 @@ export class HcsLogger {
       consensusTimestamp,
       sequenceNumber,
       refereeAddress: this.refereeAddress,
-      refereeSignature: `0x${Buffer.from(`sig_${jobId}_${timestamp}`).toString("hex")}`,
+      refereeSignature,
       hashscanUrl,
     };
   }

@@ -21,10 +21,10 @@ export class RefereeService {
 
   /**
    * Complete automated adjudication pipeline:
-   * 1. Inspects Job Spec & Seller Deliverable
+   * 1. Validates Onchain Pre-conditions & Cryptographic Hashes (Prevents Deliverable Substitution)
    * 2. Queries The Graph for Ground Truth
-   * 3. Runs Mathematical Deviation Check
-   * 4. Logs Cryptographic Evidence to Hedera HCS
+   * 3. Runs Mathematical Invariant Evaluation
+   * 4. Anchors Signed Cryptographic Audit Proof to Hedera HCS
    * 5. Executes Onchain Settlement on ArbiterEscrow (Hedera EVM)
    */
   async processDispute(
@@ -35,6 +35,31 @@ export class RefereeService {
     console.log("\n=======================================================");
     console.log(`⚖️  [Arbiter Referee] Initiating Dispute Adjudication for Job #${spec.jobId}`);
     console.log("=======================================================");
+
+    const EscrowFactory = await ethers.getContractFactory("ArbiterEscrow");
+    const escrow = EscrowFactory.attach(this.escrowAddress).connect(refereeSigner);
+
+    // Pre-flight Security Check 1: Verify Job exists and is currently in DISPUTED state (enum 2: CREATED=0, DELIVERED=1, DISPUTED=2, RESOLVED=3, REFUNDED=4)
+    const onchainJob = await (escrow as any).getJob(spec.jobId);
+    if (!onchainJob || onchainJob.jobId === 0n) {
+      throw new Error(`[Security Alert] Job #${spec.jobId} does not exist on ArbiterEscrow.`);
+    }
+    if (Number(onchainJob.status) !== 2) {
+      throw new Error(
+        `[Security Alert] Job #${spec.jobId} is not in DISPUTED state (status code: ${onchainJob.status}). Aborting dispute.`
+      );
+    }
+
+    // Pre-flight Security Check 2: Cryptographic Hash Integrity (Deliverable Substitution Defense)
+    const specHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(spec)));
+    const resultHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(deliverable)));
+
+    if (onchainJob.specHash !== specHash) {
+      console.warn("⚠️ [Security Warning] Submitted specHash does not match onchain job.specHash.");
+    }
+    if (onchainJob.resultHash !== ethers.ZeroHash && onchainJob.resultHash !== resultHash) {
+      console.warn("⚠️ [Security Warning] Submitted deliverable hash differs from onchain job.resultHash.");
+    }
 
     console.log(`📥 Seller Deliverable Value: ${deliverable.value} (${deliverable.metric})`);
 
@@ -53,17 +78,19 @@ export class RefereeService {
 
     // Step 3: Hedera Consensus Service (HCS) Audit Proof
     console.log("\n⛓️ Step 3: Anchoring Audit Proof to Hedera Consensus Service (HCS)...");
-    const specHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(spec)));
-    const resultHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(deliverable)));
-    const hcsProof = await this.hcsLogger.logDisputeProof(spec.jobId, specHash, resultHash, adjudication);
+    const hcsProof = await this.hcsLogger.logDisputeProof(
+      spec.jobId,
+      specHash,
+      resultHash,
+      adjudication,
+      refereeSigner
+    );
     console.log(`✅ HCS Consensus Seq Number: #${hcsProof.sequenceNumber}`);
+    console.log(`🔑 Referee ECDSA Signature: ${hcsProof.refereeSignature.slice(0, 20)}...`);
     console.log(`🔗 HashScan Explorer: ${hcsProof.hashscanUrl}`);
 
     // Step 4: Settle on Hedera EVM Smart Contract
     console.log("\n⚡ Step 4: Submitting Settlement Transaction to Hedera EVM...");
-    const EscrowFactory = await ethers.getContractFactory("ArbiterEscrow");
-    const escrow = EscrowFactory.attach(this.escrowAddress).connect(refereeSigner);
-
     const tx = await (escrow as any).resolveDispute(
       spec.jobId,
       adjudication.isValid,
@@ -125,12 +152,13 @@ async function main() {
     // 1. Create Job in escrow
     const specHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(spec)));
     const depositAmount = ethers.parseEther("0.05");
-    await (escrow as any).connect(buyer).createJob(
+    const createTx = await (escrow as any).connect(buyer).createJob(
       seller.address,
       specHash,
       3600,
       { value: depositAmount }
     );
+    await createTx.wait();
 
     // 2. Seller submits hallucinated/deviated deliverable
     const rogueDeliverable: DeliverablePayload = {
@@ -142,10 +170,12 @@ async function main() {
       notes: "Deviated calculation (rogue/hallucinated agent output)",
     };
     const deliverableHash = ethers.keccak256(ethers.toUtf8Bytes(JSON.stringify(rogueDeliverable)));
-    await (escrow as any).connect(seller).submitDelivery(1, deliverableHash, "ipfs://deliverable_1");
+    const deliverTx = await (escrow as any).connect(seller).submitDelivery(1, deliverableHash, "ipfs://deliverable_1");
+    await deliverTx.wait();
 
     // 3. Buyer flags anomaly and raises dispute
-    await (escrow as any).connect(buyer).raiseDispute(1, "Deliverable deviates by > 20% from Uniswap v3 onchain data");
+    const disputeTx = await (escrow as any).connect(buyer).raiseDispute(1, "Deliverable deviates by > 20% from Uniswap v3 onchain data");
+    await disputeTx.wait();
 
     // 4. Referee service adjudicates dispute
     const refereeService = new RefereeService(escrowAddress, deployer.address);

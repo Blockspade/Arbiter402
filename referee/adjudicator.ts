@@ -3,6 +3,7 @@ import { JobSpec, DeliverablePayload, AdjudicationResult } from "./types";
 export class Adjudicator {
   /**
    * Mathematically adjudicates seller deliverable against ground-truth data.
+   * Hardened against division-by-zero, NaN, and float overflow.
    */
   public adjudicate(
     spec: JobSpec,
@@ -10,10 +11,33 @@ export class Adjudicator {
     groundTruthValue: number
   ): AdjudicationResult {
     const sellerValue = deliverable.value;
-    const absoluteDelta = Math.abs(sellerValue - groundTruthValue);
-    const deltaPercent = (absoluteDelta / groundTruthValue) * 100;
-    const tolerancePercent = spec.toleranceBps / 100;
 
+    // Defense: Validate finite numeric inputs
+    if (!Number.isFinite(sellerValue) || !Number.isFinite(groundTruthValue)) {
+      return {
+        jobId: spec.jobId,
+        sellerValue: Number.isFinite(sellerValue) ? sellerValue : 0,
+        groundTruthValue: Number.isFinite(groundTruthValue) ? groundTruthValue : 0,
+        absoluteDelta: 999999,
+        deltaPercent: 100,
+        tolerancePercent: spec.toleranceBps / 100,
+        isValid: false,
+        verdict: "BUYER_REFUND_AND_SLASH",
+        reason: "Invalid numerical deliverable: non-finite or NaN value detected.",
+        calculatedAt: Math.floor(Date.now() / 1000),
+      };
+    }
+
+    const absoluteDelta = Math.abs(sellerValue - groundTruthValue);
+    const denominator = Math.abs(groundTruthValue);
+
+    // Defense: Safe division by zero handling
+    const deltaPercent =
+      denominator > 0
+        ? (absoluteDelta / denominator) * 100
+        : (sellerValue === 0 ? 0 : 100);
+
+    const tolerancePercent = spec.toleranceBps / 100;
     const isValid = deltaPercent <= tolerancePercent;
     const verdict = isValid ? "SELLER_WINS" : "BUYER_REFUND_AND_SLASH";
 

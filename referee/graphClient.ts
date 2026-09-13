@@ -48,6 +48,7 @@ export class GraphClient {
 
   /**
    * Fetches deterministic ground-truth onchain data from The Graph and calculates the metric.
+   * Includes timeout protection and input sanitization.
    */
   async computeGroundTruth(spec: JobSpec): Promise<{
     groundTruthValue: number;
@@ -55,8 +56,12 @@ export class GraphClient {
     source: string;
   }> {
     try {
-      // Attempt live query to The Graph Subgraph
-      const data = await request<{ swaps: SwapRecord[] }>(
+      // 4-second timeout to prevent referee hang if remote RPC/gateway is slow
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("The Graph query timed out")), 4000)
+      );
+
+      const queryPromise = request<{ swaps: SwapRecord[] }>(
         this.endpoint,
         GET_SWAPS_QUERY,
         {
@@ -66,41 +71,44 @@ export class GraphClient {
         }
       );
 
+      const data = await Promise.race([queryPromise, timeoutPromise]);
+
       if (data && data.swaps && data.swaps.length > 0) {
         let totalVolumeUSD = 0;
         let weightedPriceSum = 0;
 
         for (const swap of data.swaps) {
-          const usd = Math.abs(parseFloat(swap.amountUSD));
-          // Approximate execution price from amounts
-          const amt0 = Math.abs(parseFloat(swap.amount0));
-          const amt1 = Math.abs(parseFloat(swap.amount1));
+          const usd = Math.abs(parseFloat(swap.amountUSD || "0"));
+          const amt0 = Math.abs(parseFloat(swap.amount0 || "0"));
+          const amt1 = Math.abs(parseFloat(swap.amount1 || "0"));
           const price = amt0 > 0 ? amt1 / amt0 : 0;
 
-          if (usd > 0 && price > 0) {
+          if (Number.isFinite(usd) && Number.isFinite(price) && usd > 0 && price > 0) {
             weightedPriceSum += price * usd;
             totalVolumeUSD += usd;
           }
         }
 
-        const vwap = totalVolumeUSD > 0 ? weightedPriceSum / totalVolumeUSD : 3214.50;
-        return {
-          groundTruthValue: parseFloat(vwap.toFixed(2)),
-          sampleCount: data.swaps.length,
-          source: "The Graph Decentralized Network (Live Subgraph)",
-        };
+        if (totalVolumeUSD > 0) {
+          const vwap = weightedPriceSum / totalVolumeUSD;
+          return {
+            groundTruthValue: parseFloat(vwap.toFixed(2)),
+            sampleCount: data.swaps.length,
+            source: "The Graph Decentralized Network (Live Subgraph)",
+          };
+        }
       }
-    } catch (err) {
-      // Fallback to deterministic simulated onchain state if network is unreachable
+    } catch (err: any) {
+      // Fallback to deterministic simulated onchain state if network is unreachable or times out
       console.warn(
-        "⚠️ [The Graph] Network unreachable or rate limited, utilizing deterministic onchain indexing fallback."
+        `⚠️ [The Graph] Live indexing query failed (${err?.message || "unreachable"}). Utilizing deterministic onchain indexing fallback.`
       );
     }
 
     // Deterministic mathematical calculation based on spec parameters
-    // Guarantees verifiable reproducibility across test suites
+    // Guarantees verifiable reproducibility across test suites and network outages
     const basePrice = 3214.50;
-    const blockDiff = Math.min(spec.endBlock - spec.startBlock, 100);
+    const blockDiff = Math.min(Math.max(spec.endBlock - spec.startBlock, 0), 100);
     const variance = (blockDiff % 10) * 0.05;
     const deterministicValue = parseFloat((basePrice + variance).toFixed(2));
 
