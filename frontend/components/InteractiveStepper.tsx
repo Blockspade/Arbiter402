@@ -1,5 +1,5 @@
 import React from "react";
-import { Play, RotateCcw, ArrowRight, ArrowLeft, Check, ShieldAlert, Cpu, Database, Award, Lock } from "lucide-react";
+import { Play, RotateCcw, ArrowRight, ArrowLeft, Check, ShieldAlert, Cpu, Database, Award, Lock, Terminal } from "lucide-react";
 
 interface Props {
   currentStep: number;
@@ -57,44 +57,44 @@ export const InteractiveStepper: React.FC<Props> = ({
   const currentStepData = STEPS[currentStep - 1] || STEPS[0];
 
   return (
-    <div className="rounded-2xl border border-indigo-900/60 bg-gray-950/90 p-5 shadow-2xl backdrop-blur-md">
+    <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
       {/* Top Bar: Title & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-white">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+            <h2 className="text-sm font-bold font-mono tracking-wider uppercase text-slate-900">
               Protocol Workflow Simulator
             </h2>
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-slate-100 text-slate-700 border border-slate-200">
               Interactive Execution
             </span>
           </div>
-          <p className="text-xs text-gray-400 mt-0.5">
-            Step through the autonomous micro-escrow, deliverable verification, and dispute settlement pipeline
+          <p className="text-xs text-slate-500 mt-0.5 font-normal">
+            Step through the autonomous micro-escrow, deliverable hashing, and dispute resolution pipeline
           </p>
         </div>
 
         {/* Action Controls */}
         <div className="flex items-center space-x-2">
           {/* Mode Switcher */}
-          <div className="flex items-center bg-gray-900 p-1 rounded-lg border border-gray-800 text-xs">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-mono">
             <button
               onClick={() => onToggleMode("honest")}
-              className={`px-2.5 py-1 rounded font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg font-semibold transition ${
                 mode === "honest"
-                  ? "bg-emerald-500 text-black shadow-sm"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-emerald-600 text-white shadow-sm font-bold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Honest Flow
             </button>
             <button
               onClick={() => onToggleMode("rogue")}
-              className={`px-2.5 py-1 rounded font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg font-semibold transition ${
                 mode === "rogue"
-                  ? "bg-rose-500 text-white shadow-sm"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-rose-600 text-white shadow-sm font-bold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Rogue Flow (Slash)
@@ -104,17 +104,17 @@ export const InteractiveStepper: React.FC<Props> = ({
           {/* Reset Button */}
           <button
             onClick={onReset}
-            className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 text-xs transition"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-200 text-xs font-mono transition shadow-sm"
             title="Reset to Step 1"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
+            <RotateCcw className="h-3.5 w-3.5 text-slate-500" />
             <span>Reset</span>
           </button>
         </div>
       </div>
 
       {/* 5-Step Progress Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 my-4">
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5 my-4">
         {STEPS.map((s) => {
           const Icon = s.icon;
           const isActive = currentStep === s.step;
@@ -124,44 +124,46 @@ export const InteractiveStepper: React.FC<Props> = ({
             <button
               key={s.step}
               onClick={() => onSetStep(s.step)}
-              className={`flex items-center space-x-2.5 p-2.5 rounded-xl border text-left transition-all duration-200 ${
+              className={`flex items-center space-x-2.5 p-3 rounded-xl border text-left transition-all duration-200 ${
                 isActive
-                  ? "bg-indigo-600/20 border-indigo-500 shadow-md shadow-indigo-500/20 ring-1 ring-indigo-500"
+                  ? "bg-slate-950 border-slate-950 text-white shadow-md ring-2 ring-slate-900"
                   : isCompleted
-                  ? "bg-gray-900/80 border-gray-800 text-gray-300 hover:border-gray-700"
-                  : "bg-gray-950/60 border-gray-900 text-gray-500 hover:border-gray-800"
+                  ? "bg-emerald-50/80 border-emerald-200 text-emerald-800 hover:bg-emerald-50"
+                  : "bg-slate-50/70 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
               }`}
             >
               <div
-                className={`h-7 w-7 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                className={`h-7 w-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 shadow-sm ${
                   isActive
-                    ? "bg-indigo-500 text-white"
+                    ? "bg-white text-slate-950"
                     : isCompleted
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "bg-gray-800 text-gray-400"
+                    ? "bg-emerald-600 text-white"
+                    : "bg-white text-slate-600 border border-slate-200"
                 }`}
               >
-                {isCompleted ? <Check className="h-4 w-4" /> : s.step}
+                {isCompleted ? <Check className="h-3.5 w-3.5" /> : s.step}
               </div>
               <div className="overflow-hidden">
-                <div className={`text-xs font-bold truncate ${isActive ? "text-white" : ""}`}>
+                <div className={`text-xs font-bold truncate ${isActive ? "text-white" : "text-slate-800"}`}>
                   {s.title}
                 </div>
-                <div className="text-[10px] text-gray-500 truncate">{s.subtitle}</div>
+                <div className={`text-[10px] font-mono truncate ${isActive ? "text-slate-300" : "text-slate-500"}`}>
+                  {s.subtitle}
+                </div>
               </div>
             </button>
           );
         })}
       </div>
 
-      {/* Presenter Narration Teleprompter */}
-      <div className="rounded-xl bg-gray-900/80 border border-gray-800/80 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      {/* Live Protocol State Telemetry Feed */}
+      <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-start sm:items-center space-x-2.5">
-          <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold uppercase tracking-wider flex-shrink-0">
-            Presenter Guide
+          <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-white text-slate-800 font-mono text-[10px] font-bold uppercase tracking-wider flex-shrink-0 border border-slate-200 shadow-sm">
+            <Terminal className="h-3 w-3 text-slate-600" />
+            <span>State Telemetry</span>
           </span>
-          <p className="text-gray-300 font-medium">
-            <strong className="text-white">Say: </strong>
+          <p className="text-slate-800 font-normal">
             &ldquo;{currentStepData.narration}&rdquo;
           </p>
         </div>
@@ -171,7 +173,7 @@ export const InteractiveStepper: React.FC<Props> = ({
           <button
             onClick={() => onSetStep(Math.max(1, currentStep - 1))}
             disabled={currentStep === 1}
-            className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-gray-200 text-xs transition"
+            className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 text-xs font-mono transition border border-slate-200 shadow-sm"
           >
             <ArrowLeft className="h-3 w-3" />
             <span>Prev</span>
@@ -179,7 +181,7 @@ export const InteractiveStepper: React.FC<Props> = ({
           <button
             onClick={() => onSetStep(Math.min(5, currentStep + 1))}
             disabled={currentStep === 5}
-            className="flex items-center space-x-1 px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-xs transition shadow-md shadow-indigo-600/30"
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-black disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-xs font-mono transition shadow-sm"
           >
             <span>Next Step</span>
             <ArrowRight className="h-3 w-3" />

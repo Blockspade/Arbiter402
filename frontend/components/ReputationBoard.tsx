@@ -10,17 +10,17 @@ interface Props {
 
 export const ReputationBoard: React.FC<Props> = ({ agents, isRogue, currentStep }) => {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-gray-900/80 p-6 backdrop-blur-sm">
-      <div className="flex items-center justify-between pb-4 border-b border-gray-800 mb-5">
+    <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
         <div>
-          <div className="flex items-center space-x-2">
-            <h3 className="text-base font-bold text-white">ERC-8004 Agent Reputation Registry</h3>
-            <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              Live Onchain Trust Score
+          <div className="flex items-center space-x-2.5">
+            <h3 className="text-base font-bold font-mono tracking-tight text-slate-950">ERC-8004 Agent Reputation Registry</h3>
+            <span className="px-2.5 py-0.5 text-[11px] font-mono font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Live Onchain Registry
             </span>
           </div>
-          <p className="text-xs text-gray-400 mt-0.5">
-            Autonomous slashing locks fraudulent agents out of future machine commerce
+          <p className="text-xs text-slate-500 mt-1 font-normal">
+            Autonomous onchain slashing locks fraudulent agents out of future autonomous escrow pools
           </p>
         </div>
       </div>
@@ -60,78 +60,89 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue, currentStep 
           return (
             <div
               key={agent.address}
-              className={`rounded-xl p-5 border transition-all duration-300 ${
+              className={`rounded-xl p-5 border transition-all duration-300 flex flex-col justify-between ${
                 isSlashed
-                  ? "bg-rose-950/20 border-rose-800/80 shadow-lg shadow-rose-950/20 ring-1 ring-rose-500"
+                  ? "bg-rose-50/70 border-rose-300 shadow-sm"
                   : isBoosted
-                  ? "bg-emerald-950/20 border-emerald-800/80 shadow-lg shadow-emerald-950/20 ring-1 ring-emerald-500"
-                  : "bg-gray-950 border-gray-800"
+                  ? "bg-emerald-50/70 border-emerald-300 shadow-sm"
+                  : "bg-slate-50/70 border-slate-200"
               }`}
             >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-3">
-                  <div
-                    className={`h-10 w-10 rounded-xl flex items-center justify-center ${
+              <div>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div
+                      className={`h-10 w-10 rounded-xl flex items-center justify-center shadow-sm ${
+                        isSlashed
+                          ? "bg-rose-100 text-rose-700 border border-rose-300"
+                          : isBoosted
+                          ? "bg-emerald-100 text-emerald-700 border border-emerald-300"
+                          : "bg-white text-slate-700 border border-slate-200"
+                      }`}
+                    >
+                      {isSlashed ? (
+                        <ShieldAlert className="h-5 w-5 text-rose-600" />
+                      ) : isBoosted ? (
+                        <Award className="h-5 w-5 text-emerald-600" />
+                      ) : (
+                        <ShieldCheck className="h-5 w-5 text-slate-700" />
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-slate-900">{agent.name}</h4>
+                      <p className="text-xs text-slate-500 font-normal">{agent.role}</p>
+                    </div>
+                  </div>
+
+                  <span
+                    className={`text-[10px] font-mono px-2.5 py-1 rounded-md font-bold uppercase tracking-wider transition-all ${
                       isSlashed
-                        ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                        ? "bg-rose-100 text-rose-800 border border-rose-300"
                         : isBoosted
-                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                        : "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
+                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                        : "bg-white text-slate-700 border border-slate-200 shadow-sm"
                     }`}
                   >
-                    {isSlashed ? (
-                      <ShieldAlert className="h-5 w-5 text-rose-400" />
-                    ) : isBoosted ? (
-                      <Award className="h-5 w-5 text-emerald-400" />
-                    ) : (
-                      <ShieldCheck className="h-5 w-5 text-indigo-400" />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-white">{agent.name}</h4>
-                    <p className="text-xs text-gray-400">{agent.role}</p>
-                  </div>
+                    {badgeText}
+                  </span>
                 </div>
 
-                <span
-                  className={`text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider transition-all ${
-                    isSlashed
-                      ? "bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse"
-                      : isBoosted
-                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                      : "bg-gray-800 text-gray-400 border border-gray-700"
-                  }`}
-                >
-                  {badgeText}
-                </span>
+                {/* Score Progress Bar */}
+                <div className="w-full bg-slate-200 rounded-full h-1.5 mt-3.5 overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      isSlashed ? "w-1/2 bg-rose-600" : isBoosted ? "w-full bg-emerald-500" : "w-full bg-emerald-600"
+                    }`}
+                  />
+                </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-gray-800/60 font-mono text-center">
-                <div className="bg-gray-900/60 rounded-lg p-2">
-                  <span className="text-[10px] text-gray-500 block uppercase">Trust Score</span>
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200/80 font-mono text-center">
+                <div className="bg-white rounded-lg p-2 border border-slate-200 shadow-sm">
+                  <span className="text-[10px] text-slate-500 block uppercase font-mono">Trust Score</span>
                   <span
-                    className={`text-lg font-bold flex items-center justify-center ${
-                      isSlashed ? "text-rose-400" : isBoosted ? "text-emerald-400" : "text-gray-200"
+                    className={`text-base font-bold tabular-nums flex items-center justify-center ${
+                      isSlashed ? "text-rose-700" : isBoosted ? "text-emerald-700" : "text-slate-900"
                     }`}
                   >
-                    {isSlashed && <TrendingDown className="h-4 w-4 mr-1 text-rose-400" />}
-                    {isBoosted && <TrendingUp className="h-4 w-4 mr-1 text-emerald-400" />}
+                    {isSlashed && <TrendingDown className="h-3.5 w-3.5 mr-1 text-rose-600" />}
+                    {isBoosted && <TrendingUp className="h-3.5 w-3.5 mr-1 text-emerald-600" />}
                     {displayScore} pts
                   </span>
                 </div>
 
-                <div className="bg-gray-900/60 rounded-lg p-2">
-                  <span className="text-[10px] text-gray-500 block uppercase">Completed Jobs</span>
-                  <span className="text-lg font-bold text-gray-200">
+                <div className="bg-white rounded-lg p-2 border border-slate-200 shadow-sm">
+                  <span className="text-[10px] text-slate-500 block uppercase font-mono">Jobs Settled</span>
+                  <span className="text-base font-bold text-slate-900 tabular-nums">
                     {currentStep >= 2 ? (currentStep === 5 ? (isRogue ? 2 : 3) : 2) : 2}
                   </span>
                 </div>
 
-                <div className="bg-gray-900/60 rounded-lg p-2">
-                  <span className="text-[10px] text-gray-500 block uppercase">Slashes</span>
+                <div className="bg-white rounded-lg p-2 border border-slate-200 shadow-sm">
+                  <span className="text-[10px] text-slate-500 block uppercase font-mono">Slashes</span>
                   <span
-                    className={`text-lg font-bold ${
-                      displaySlashes > 0 ? "text-rose-400 font-extrabold" : "text-gray-400"
+                    className={`text-base font-bold tabular-nums ${
+                      displaySlashes > 0 ? "text-rose-700 font-extrabold" : "text-slate-600"
                     }`}
                   >
                     {displaySlashes}
@@ -139,8 +150,8 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue, currentStep 
                 </div>
               </div>
 
-              <div className="mt-3 text-[11px] font-mono text-gray-500 truncate">
-                Address: {agent.address}
+              <div className="mt-2.5 text-[11px] font-mono text-slate-500 truncate">
+                Address: <span className="text-slate-700 font-medium">{agent.address}</span>
               </div>
             </div>
           );

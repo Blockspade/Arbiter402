@@ -54,7 +54,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -69,48 +69,48 @@ export default function Dashboard() {
 
         {/* Protocol Metric Highlights */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-4">
-            <div className="flex items-center space-x-2 text-emerald-400 mb-1">
-              <Zap className="h-4 w-4" />
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400">
+          <div className="rounded-xl bg-white border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-200">
+            <div className="flex items-center space-x-2 text-slate-700 mb-1.5">
+              <Zap className="h-4 w-4 text-emerald-600" />
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
                 Resolution Finality
               </span>
             </div>
-            <div className="text-2xl font-extrabold font-mono text-white">0.84s</div>
-            <p className="text-[11px] text-gray-500 mt-1">Hedera EVM sub-second execution</p>
+            <div className="text-2xl font-bold font-mono text-slate-950 tracking-tight tabular-nums">0.84s</div>
+            <p className="text-[11px] text-slate-500 mt-1 font-normal">Hedera EVM sub-second execution</p>
           </div>
 
-          <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-4">
-            <div className="flex items-center space-x-2 text-indigo-400 mb-1">
-              <Database className="h-4 w-4" />
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400">
+          <div className="rounded-xl bg-white border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-200">
+            <div className="flex items-center space-x-2 text-slate-700 mb-1.5">
+              <Database className="h-4 w-4 text-slate-600" />
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
                 Ground-Truth Oracle
               </span>
             </div>
-            <div className="text-2xl font-extrabold font-mono text-white">100%</div>
-            <p className="text-[11px] text-gray-500 mt-1">The Graph decentralized subgraphs</p>
+            <div className="text-2xl font-bold font-mono text-slate-950 tracking-tight tabular-nums">100%</div>
+            <p className="text-[11px] text-slate-500 mt-1 font-normal">The Graph decentralized subgraphs</p>
           </div>
 
-          <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-4">
-            <div className="flex items-center space-x-2 text-orange-400 mb-1">
-              <Bot className="h-4 w-4" />
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400">
+          <div className="rounded-xl bg-white border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-200">
+            <div className="flex items-center space-x-2 text-slate-700 mb-1.5">
+              <Bot className="h-4 w-4 text-slate-600" />
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
                 Agent Reputation
               </span>
             </div>
-            <div className="text-2xl font-extrabold font-mono text-white">ERC-8004</div>
-            <p className="text-[11px] text-gray-500 mt-1">Autonomous onchain slashing</p>
+            <div className="text-2xl font-bold font-mono text-slate-950 tracking-tight tabular-nums">ERC-8004</div>
+            <p className="text-[11px] text-slate-500 mt-1 font-normal">Autonomous onchain slashing</p>
           </div>
 
-          <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-4">
-            <div className="flex items-center space-x-2 text-emerald-400 mb-1">
-              <ShieldCheck className="h-4 w-4" />
-              <span className="text-xs font-mono uppercase tracking-wider text-gray-400">
+          <div className="rounded-xl bg-white border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition duration-200">
+            <div className="flex items-center space-x-2 text-slate-700 mb-1.5">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500">
                 Total Gas Cost
               </span>
             </div>
-            <div className="text-2xl font-extrabold font-mono text-white">~$0.007</div>
-            <p className="text-[11px] text-gray-500 mt-1">Viable for high-frequency micropayments</p>
+            <div className="text-2xl font-bold font-mono text-slate-950 tracking-tight tabular-nums">~$0.007</div>
+            <p className="text-[11px] text-slate-500 mt-1 font-normal">Viable for high-frequency micropayments</p>
           </div>
         </div>
 
@@ -142,7 +142,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      <footer className="border-t border-gray-900 bg-gray-950 py-6 text-center text-xs text-gray-500">
+      <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
         <p>
           Arbiter402 • Autonomous Sub-Second Micro-Escrow &amp; Ground-Truth Adjudication Protocol • Powered by Hedera, The Graph, and Bazantic MCP
         </p>
