@@ -13,7 +13,9 @@
     "sim:honest": "ts-node agents/sellerAgent.ts --mode=honest",
     "sim:rogue": "ts-node agents/sellerAgent.ts --mode=rogue",
     "referee": "ts-node referee/refereeService.ts",
-    "mcp": "ts-node referee/mcpRecipe.ts"
+    "mcp": "ts-node referee/mcpRecipe.ts",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
   },
   "keywords": [
     "hedera",
