@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ArbiterEscrow, ERC8004ReputationRegistry } from "../../typechain-types";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
-describe("Arbiter402 Protocol: Escrow & ERC-8004 Slashing", function () {
+describe("Arbiter402 Protocol: Hardened Escrow & ERC-8004 Security Tests", function () {
   let escrow: ArbiterEscrow;
   let registry: ERC8004ReputationRegistry;
   let owner: SignerWithAddress;
@@ -28,7 +28,10 @@ describe("Arbiter402 Protocol: Escrow & ERC-8004 Slashing", function () {
 
     // 2. Deploy ArbiterEscrow
     const EscrowFactory = await ethers.getContractFactory("ArbiterEscrow");
-    escrow = (await EscrowFactory.deploy(referee.address, await registry.getAddress())) as unknown as ArbiterEscrow;
+    escrow = (await EscrowFactory.deploy(
+      referee.address,
+      await registry.getAddress()
+    )) as unknown as ArbiterEscrow;
     await escrow.waitForDeployment();
 
     // 3. Authorize Escrow on the Reputation Registry
@@ -49,7 +52,7 @@ describe("Arbiter402 Protocol: Escrow & ERC-8004 Slashing", function () {
     });
   });
 
-  describe("2. Job Creation", function () {
+  describe("2. Job Creation & Security Validations", function () {
     it("should allow buyer to lock escrow deposit and emit JobCreated", async function () {
       const tx = await escrow.connect(buyer).createJob(seller.address, SPEC_HASH, DURATION, {
         value: DEPOSIT,
@@ -70,6 +73,12 @@ describe("Arbiter402 Protocol: Escrow & ERC-8004 Slashing", function () {
       await expect(
         escrow.connect(buyer).createJob(seller.address, SPEC_HASH, DURATION, { value: 0 })
       ).to.be.revertedWith("ArbiterEscrow: escrow deposit must be > 0");
+    });
+
+    it("should revert if specHash is zero", async function () {
+      await expect(
+        escrow.connect(buyer).createJob(seller.address, ethers.ZeroHash, DURATION, { value: DEPOSIT })
+      ).to.be.revertedWith("ArbiterEscrow: spec hash cannot be empty");
     });
 
     it("should revert if buyer and seller are identical", async function () {
@@ -196,7 +205,46 @@ describe("Arbiter402 Protocol: Escrow & ERC-8004 Slashing", function () {
     });
   });
 
-  describe("6. Deadline Timeout", function () {
+  describe("6. Security Hardening: Challenge Window & Liveness Protection", function () {
+    beforeEach(async function () {
+      await escrow.connect(buyer).createJob(seller.address, SPEC_HASH, DURATION, { value: DEPOSIT });
+      await escrow.connect(seller).submitDelivery(1n, VALID_RESULT_HASH, "ipfs://QmValid");
+    });
+
+    it("should allow seller to auto-claim uncontested delivery after challenge window expires", async function () {
+      // Fast-forward past the challenge window (1 hour)
+      await ethers.provider.send("evm_increaseTime", [3601]);
+      await ethers.provider.send("evm_mine", []);
+
+      const initialSellerBalance = await ethers.provider.getBalance(seller.address);
+
+      const tx = await escrow.connect(seller).claimUncontestedDelivery(1n);
+      const receipt = await tx.wait();
+      const gasSpent = receipt!.gasUsed * receipt!.gasPrice;
+
+      await expect(tx)
+        .to.emit(escrow, "UncontestedSettlementClaimed")
+        .withArgs(1n, seller.address, DEPOSIT);
+
+      const finalSellerBalance = await ethers.provider.getBalance(seller.address);
+      expect(finalSellerBalance - initialSellerBalance + gasSpent).to.equal(DEPOSIT);
+
+      const job = await escrow.getJob(1n);
+      expect(job.status).to.equal(3n); // RESOLVED
+    });
+
+    it("should revert if buyer attempts to dispute after challenge window has expired", async function () {
+      // Fast-forward past challenge window
+      await ethers.provider.send("evm_increaseTime", [3601]);
+      await ethers.provider.send("evm_mine", []);
+
+      await expect(
+        escrow.connect(buyer).raiseDispute(1n, "Too late dispute")
+      ).to.be.revertedWith("ArbiterEscrow: challenge window has expired");
+    });
+  });
+
+  describe("7. Security Hardening: Deadline Timeout & Abandonment", function () {
     it("should allow buyer to claim refund if seller failed to submit delivery before deadline", async function () {
       const shortDuration = 10;
       await escrow.connect(buyer).createJob(seller.address, SPEC_HASH, shortDuration, { value: DEPOSIT });

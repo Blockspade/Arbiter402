@@ -23,6 +23,7 @@ interface IArbiterEscrow {
         bytes32 resultHash;
         string deliveryUri;
         uint256 deadline;
+        uint256 challengeWindow;
         JobStatus status;
         string disputeReason;
         string auditLogUri;
@@ -73,6 +74,22 @@ interface IArbiterEscrow {
         uint256 refundAmount
     );
 
+    event UncontestedSettlementClaimed(
+        uint256 indexed jobId,
+        address indexed seller,
+        uint256 amount
+    );
+
+    event WithdrawalPending(
+        address indexed recipient,
+        uint256 amount
+    );
+
+    event WithdrawalCompleted(
+        address indexed recipient,
+        uint256 amount
+    );
+
     function createJob(
         address payable seller,
         bytes32 specHash,
@@ -96,6 +113,10 @@ interface IArbiterEscrow {
     ) external;
 
     function claimTimeout(uint256 jobId) external;
+
+    function claimUncontestedDelivery(uint256 jobId) external;
+
+    function withdraw() external;
 
     function getJob(uint256 jobId) external view returns (Job memory);
 }
