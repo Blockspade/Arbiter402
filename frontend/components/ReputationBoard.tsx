@@ -1,13 +1,14 @@
 import React from "react";
-import { ShieldCheck, ShieldAlert, TrendingUp, TrendingDown } from "lucide-react";
+import { ShieldCheck, ShieldAlert, TrendingUp, TrendingDown, Award } from "lucide-react";
 import { AgentReputationUI } from "../lib/mockData";
 
 interface Props {
   agents: AgentReputationUI[];
   isRogue: boolean;
+  currentStep: number;
 }
 
-export const ReputationBoard: React.FC<Props> = ({ agents, isRogue }) => {
+export const ReputationBoard: React.FC<Props> = ({ agents, isRogue, currentStep }) => {
   return (
     <div className="rounded-2xl border border-gray-800 bg-gray-900/80 p-6 backdrop-blur-sm">
       <div className="flex items-center justify-between pb-4 border-b border-gray-800 mb-5">
@@ -27,16 +28,43 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {agents.map((agent) => {
           const isSeller = agent.name.includes("Seller");
-          const displayScore = isSeller ? (isRogue ? 55 : 105) : 100;
-          const displaySlashes = isSeller ? (isRogue ? 1 : 0) : 0;
-          const isSlashed = isSeller && isRogue;
+          
+          let displayScore = 100;
+          let displaySlashes = 0;
+          let badgeText = "BASELINE (100)";
+          let isSlashed = false;
+          let isBoosted = false;
+
+          if (!isSeller) {
+            displayScore = 100;
+            displaySlashes = 0;
+            badgeText = "TRUSTED (BUYER)";
+          } else {
+            if (currentStep < 5) {
+              displayScore = 100;
+              displaySlashes = 0;
+              badgeText = "IN JOB #3 (100 PTS)";
+            } else if (isRogue) {
+              displayScore = 50;
+              displaySlashes = 1;
+              badgeText = "SLASHED (-50 PTS)";
+              isSlashed = true;
+            } else {
+              displayScore = 105;
+              displaySlashes = 0;
+              badgeText = "TRUSTED (+5 PTS)";
+              isBoosted = true;
+            }
+          }
 
           return (
             <div
               key={agent.address}
               className={`rounded-xl p-5 border transition-all duration-300 ${
                 isSlashed
-                  ? "bg-rose-950/20 border-rose-800/80 shadow-lg shadow-rose-950/20"
+                  ? "bg-rose-950/20 border-rose-800/80 shadow-lg shadow-rose-950/20 ring-1 ring-rose-500"
+                  : isBoosted
+                  ? "bg-emerald-950/20 border-emerald-800/80 shadow-lg shadow-emerald-950/20 ring-1 ring-emerald-500"
                   : "bg-gray-950 border-gray-800"
               }`}
             >
@@ -46,13 +74,17 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue }) => {
                     className={`h-10 w-10 rounded-xl flex items-center justify-center ${
                       isSlashed
                         ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                        : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        : isBoosted
+                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        : "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
                     }`}
                   >
                     {isSlashed ? (
                       <ShieldAlert className="h-5 w-5 text-rose-400" />
+                    ) : isBoosted ? (
+                      <Award className="h-5 w-5 text-emerald-400" />
                     ) : (
-                      <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                      <ShieldCheck className="h-5 w-5 text-indigo-400" />
                     )}
                   </div>
                   <div>
@@ -62,13 +94,15 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue }) => {
                 </div>
 
                 <span
-                  className={`text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider ${
+                  className={`text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider transition-all ${
                     isSlashed
                       ? "bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse"
-                      : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : isBoosted
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : "bg-gray-800 text-gray-400 border border-gray-700"
                   }`}
                 >
-                  {isSlashed ? "SLASHED (-50)" : "TRUSTED (+5)"}
+                  {badgeText}
                 </span>
               </div>
 
@@ -77,21 +111,20 @@ export const ReputationBoard: React.FC<Props> = ({ agents, isRogue }) => {
                   <span className="text-[10px] text-gray-500 block uppercase">Trust Score</span>
                   <span
                     className={`text-lg font-bold flex items-center justify-center ${
-                      isSlashed ? "text-rose-400" : "text-emerald-400"
+                      isSlashed ? "text-rose-400" : isBoosted ? "text-emerald-400" : "text-gray-200"
                     }`}
                   >
-                    {isSlashed ? (
-                      <TrendingDown className="h-4 w-4 mr-1" />
-                    ) : (
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                    )}
-                    {displayScore}
+                    {isSlashed && <TrendingDown className="h-4 w-4 mr-1 text-rose-400" />}
+                    {isBoosted && <TrendingUp className="h-4 w-4 mr-1 text-emerald-400" />}
+                    {displayScore} pts
                   </span>
                 </div>
 
                 <div className="bg-gray-900/60 rounded-lg p-2">
                   <span className="text-[10px] text-gray-500 block uppercase">Completed Jobs</span>
-                  <span className="text-lg font-bold text-gray-200">{agent.totalJobs}</span>
+                  <span className="text-lg font-bold text-gray-200">
+                    {currentStep >= 2 ? (currentStep === 5 ? (isRogue ? 2 : 3) : 2) : 2}
+                  </span>
                 </div>
 
                 <div className="bg-gray-900/60 rounded-lg p-2">

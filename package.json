@@ -10,6 +10,7 @@
     "deploy:hedera": "hardhat run contracts/scripts/deploy.ts --network hedera_testnet",
     "seed": "hardhat run contracts/scripts/seedDemo.ts --network hedera_testnet",
     "sim": "ts-node agents/runSimulation.ts",
+    "sim:interactive": "ts-node agents/runInteractiveSim.ts",
     "sim:honest": "ts-node agents/sellerAgent.ts --mode=honest",
     "sim:rogue": "ts-node agents/sellerAgent.ts --mode=rogue",
     "referee": "ts-node referee/refereeService.ts",
