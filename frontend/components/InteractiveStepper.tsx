@@ -43,7 +43,7 @@ export const STEPS = [
     title: "5. HCS Audit & Settle",
     subtitle: "Hedera HCS & ERC-8004",
     icon: Award,
-    narration: "Proof is anchored to Hedera HCS (Topic 0.0.4851920), 100% refunded to buyer, and rogue seller is slashed by -50 points!",
+    narration: "Proof is anchored to Hedera HCS (Topic 0.0.10520952), 100% refunded to buyer, and rogue seller is slashed by -50 points!",
   },
 ];
 
@@ -64,14 +64,14 @@ export const InteractiveStepper: React.FC<Props> = ({
           <div className="flex items-center space-x-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             <h2 className="text-sm font-extrabold uppercase tracking-wider text-white">
-              Interactive Pitch Walkthrough Controller
+              Protocol Workflow Simulator
             </h2>
             <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              Live Demo Mode
+              Interactive Execution
             </span>
           </div>
           <p className="text-xs text-gray-400 mt-0.5">
-            Step through the exact multi-sponsor adjudication flow for hackathon presentation
+            Step through the autonomous micro-escrow, deliverable verification, and dispute settlement pipeline
           </p>
         </div>
 

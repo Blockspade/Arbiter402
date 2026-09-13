@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <h1 className="text-2xl font-bold tracking-tight text-white">Arbiter402</h1>
                 <span className="px-2 py-0.5 text-xs font-semibold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  v1.0 ETHOnline
+                  v1.0 Protocol
                 </span>
               </div>
               <p className="text-xs text-gray-400">
@@ -30,26 +30,38 @@ export const Header: React.FC = () => {
               <span>Hedera Testnet (296)</span>
             </div>
 
-            {/* The Graph Badge */}
-            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-indigo-950/50 border border-indigo-800/50 text-xs text-indigo-300">
-              <Cpu className="h-3.5 w-3.5 text-indigo-400" />
-              <span>The Graph Oracle</span>
-            </div>
-
-            {/* Bazantic MCP Badge */}
-            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-orange-950/40 border border-orange-800/40 text-xs text-orange-300">
-              <Activity className="h-3.5 w-3.5 text-orange-400" />
-              <span>Bazantic Recipe</span>
-            </div>
-
-            {/* HashScan Link */}
+            {/* Escrow Contract Link */}
             <a
-              href="https://hashscan.io/testnet/topic/0.0.4851920"
+              href="https://hashscan.io/testnet/contract/0.0.10520281"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/50 transition text-xs text-emerald-300 border border-emerald-800/40"
+              title="Verified on Sourcify (Exact Match)"
+            >
+              <span>Escrow: 0.0.10520281</span>
+              <ExternalLink className="h-3 w-3 text-emerald-400" />
+            </a>
+
+            {/* ERC-8004 Registry Link */}
+            <a
+              href="https://hashscan.io/testnet/contract/0.0.10520278"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-indigo-950/40 hover:bg-indigo-900/50 transition text-xs text-indigo-300 border border-indigo-800/40"
+              title="Verified on Sourcify (Exact Match)"
+            >
+              <span>ERC-8004: 0.0.10520278</span>
+              <ExternalLink className="h-3 w-3 text-indigo-400" />
+            </a>
+
+            {/* HCS Topic Link */}
+            <a
+              href="https://hashscan.io/testnet/topic/0.0.10520952"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 transition text-xs text-gray-200 border border-gray-700"
             >
-              <span>HCS: 0.0.4851920</span>
+              <span>HCS: 0.0.10520952</span>
               <ExternalLink className="h-3 w-3 text-gray-400" />
             </a>
           </div>

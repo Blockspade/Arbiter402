@@ -215,7 +215,7 @@ export const DisputeTerminal: React.FC<Props> = ({
               {currentStep === 4 && "Deterministic onchain indexing proves seller calculation was hallucinated."}
               {currentStep === 5 &&
                 (isRogue
-                  ? "Cryptographic proof anchored to Hedera HCS (Topic 0.0.4851920). Settlement finalized onchain in 0.84s."
+                  ? "Cryptographic proof anchored to Hedera HCS (Topic 0.0.10520952). Settlement finalized onchain in 0.84s."
                   : "Delivery matched ground truth perfectly. Payment released to seller with positive reputation feedback.")}
             </p>
           </div>

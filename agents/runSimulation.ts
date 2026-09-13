@@ -117,8 +117,11 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch((err) => {
-    console.error("Simulation failed:", err);
-    process.exitCode = 1;
-  });
+  main()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error("Simulation failed:", err);
+      process.exit(1);
+    });
 }
+

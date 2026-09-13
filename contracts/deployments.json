@@ -1,0 +1,10 @@
+{
+  "network": "hedera_testnet",
+  "chainId": "296",
+  "deployedAt": "2026-09-13T08:21:23.314Z",
+  "contracts": {
+    "ERC8004ReputationRegistry": "0x1F3D8aB86b2Ff573B8723D1356686c37EdaA1359",
+    "ArbiterEscrow": "0x0F7000f78eAa0e0be369A75ac6ADED4654cF3Ae9",
+    "Referee": "0xf9692Fa79ec1E3A78798445E5b720d9bF17E6AA2"
+  }
+}

@@ -21,7 +21,7 @@ function promptEnter(query: string): Promise<void> {
 async function main() {
   console.clear();
   console.log("\n=======================================================================");
-  console.log("⚖️   ARBITER402: INTERACTIVE PITCH DEMONSTRATION");
+  console.log("⚖️   ARBITER402: PROTOCOL EXECUTION DEMONSTRATION");
   console.log("     Sub-Second Micro-Escrow & Ground-Truth Adjudication");
   console.log("     Hedera EVM + The Graph + Hedera HCS + ERC-8004");
   console.log("=======================================================================\n");
@@ -107,7 +107,7 @@ async function main() {
   const [finalScore, totalJobs, slashes] = await registry.getReputation(sellerSigner.address);
 
   console.log("\n=======================================================================");
-  console.log("🏆 LIVE PITCH DEMONSTRATION COMPLETE!");
+  console.log("🏆 PROTOCOL EXECUTION COMPLETE!");
   console.log("=======================================================================");
   console.log(`💼 Seller ERC-8004 Trust Score: ${finalScore} pts (Slashed from 100)`);
   console.log(`⚠️ Slashes Recorded          : ${slashes}`);
@@ -118,8 +118,11 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch((err) => {
-    console.error("Interactive simulation failed:", err);
-    process.exitCode = 1;
-  });
+  main()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error("Interactive simulation failed:", err);
+      process.exit(1);
+    });
 }
+

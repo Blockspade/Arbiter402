@@ -16,8 +16,8 @@ dotenv.config();
 /**
  * =========================================================================
  * BAZANTIC RECIPE SPECIFICATION
- * Track: Best Recipe that uses EthGlobal Hackathon Sponsor APIs ($1,000)
- * Sponsors Combined: The Graph (Ground-Truth Oracle) + Hedera (EVM & HCS)
+ * Autonomous Ground-Truth Dispute Adjudication Recipe
+ * Integrations: The Graph (Ground-Truth Oracle) + Hedera (EVM & HCS)
  * =========================================================================
  */
 export const BAZANTIC_RECIPE_METADATA = {
@@ -113,7 +113,7 @@ export class ArbiterMcpServer {
           },
           {
             name: "get_bazantic_recipe_info",
-            description: "Returns the complete Bazantic Recipe specification and multi-sponsor workflow documentation.",
+            description: "Returns the complete Bazantic Recipe specification and autonomous workflow documentation.",
             inputSchema: { type: "object", properties: {} },
           },
         ],

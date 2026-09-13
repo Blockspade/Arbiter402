@@ -18,7 +18,7 @@ export class HcsLogger {
 
   constructor(refereeAddress: string, topicId?: string) {
     this.refereeAddress = refereeAddress;
-    this.topicId = topicId || process.env.HEDERA_HCS_TOPIC_ID || "0.0.4851920";
+    this.topicId = topicId || process.env.HEDERA_HCS_TOPIC_ID || "0.0.10520952";
 
     const operatorId = process.env.HEDERA_OPERATOR_ID;
     const operatorKey = process.env.HEDERA_OPERATOR_KEY;

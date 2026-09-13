@@ -39,14 +39,14 @@ export default function Dashboard() {
       const liveProof: HcsAuditRecordUI = {
         id: 99,
         jobId: 3,
-        topicId: "0.0.4851920",
-        sequenceNumber: 423,
-        consensusTimestamp: "1789269922.981023411",
+        topicId: "0.0.10520952",
+        sequenceNumber: 2,
+        consensusTimestamp: "1789292023.981559032",
         verdict: "BUYER_REFUND_AND_SLASH",
         sellerValue: 3842.10,
         groundTruthValue: 3214.50,
         deltaPercent: 19.52,
-        hashscanUrl: "https://hashscan.io/testnet/topic/0.0.4851920",
+        hashscanUrl: "https://hashscan.io/testnet/topic/0.0.10520952",
       };
       return [liveProof, ...INITIAL_HCS_LOGS];
     }
@@ -58,7 +58,7 @@ export default function Dashboard() {
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Pitch Walkthrough Controller */}
+        {/* Protocol Workflow Controller */}
         <InteractiveStepper
           currentStep={currentStep}
           onSetStep={setCurrentStep}
@@ -144,7 +144,7 @@ export default function Dashboard() {
 
       <footer className="border-t border-gray-900 bg-gray-950 py-6 text-center text-xs text-gray-500">
         <p>
-          Arbiter402 • Built for ETHOnline 2026 • Targeting Hedera ($6,000), The Graph ($5,000), and Bazantic ($1,000)
+          Arbiter402 • Autonomous Sub-Second Micro-Escrow &amp; Ground-Truth Adjudication Protocol • Powered by Hedera, The Graph, and Bazantic MCP
         </p>
       </footer>
     </div>

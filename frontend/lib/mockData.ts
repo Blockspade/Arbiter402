@@ -83,13 +83,13 @@ export const INITIAL_HCS_LOGS: HcsAuditRecordUI[] = [
   {
     id: 1,
     jobId: 2,
-    topicId: "0.0.4851920",
-    sequenceNumber: 322,
-    consensusTimestamp: "1789253533.213184366",
+    topicId: "0.0.10520952",
+    sequenceNumber: 2,
+    consensusTimestamp: "1789292023.981559032",
     verdict: "BUYER_REFUND_AND_SLASH",
     sellerValue: 3842.10,
     groundTruthValue: 3214.50,
     deltaPercent: 19.52,
-    hashscanUrl: "https://hashscan.io/testnet/topic/0.0.4851920",
+    hashscanUrl: "https://hashscan.io/testnet/topic/0.0.10520952",
   },
 ];
