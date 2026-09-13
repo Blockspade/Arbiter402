@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="35%" r="60%" fx="50%" fy="30%">
+      <stop offset="0%" stop-color="#0F172A" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#020617" stop-opacity="1" />
+    </radialGradient>
+
+    <!-- Subtle Tech Grid Pattern -->
+    <pattern id="techGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#1E293B" stroke-width="0.8" stroke-opacity="0.4" />
+      <circle cx="60" cy="0" r="1.5" fill="#334155" fill-opacity="0.3" />
+    </pattern>
+
+    <!-- Card Background Gradient -->
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0B1120" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#030712" stop-opacity="0.98" />
+    </linearGradient>
+
+    <!-- Header Gradient for Logo Accent -->
+    <linearGradient id="brandAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Background Base -->
+  <rect width="1920" height="1080" fill="url(#bgGlow)" />
+  <rect width="1920" height="1080" fill="url(#techGrid)" />
+
+  <!-- Top Ambient Glow Line -->
+  <rect x="0" y="0" width="1920" height="2" fill="url(#brandAccent)" opacity="0.6" />
+
+  <!-- 2. Hero Header Section -->
+  <g transform="translate(0, 0)">
+    <!-- Brand Emblem + Title Group -->
+    <g transform="translate(680, 100)">
+      <!-- Black Squircle Icon -->
+      <rect x="0" y="0" width="84" height="84" rx="22" fill="#090D16" stroke="#334155" stroke-width="1.5" />
+      <!-- White Shield Lucide Icon -->
+      <g transform="translate(18, 18) scale(2)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+        <path d="M12 8v4" />
+        <path d="M12 16h.01" />
+      </g>
+
+      <!-- Protocol Name -->
+      <text x="105" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="800" fill="#FFFFFF" letter-spacing="-0.03em">Arbiter402</text>
+      
+      <!-- Version Tag -->
+      <rect x="475" y="24" width="76" height="30" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1" />
+      <text x="513" y="44" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="12" font-weight="700" fill="#94A3B8" text-anchor="middle">v1.0</text>
+    </g>
+
+    <!-- Primary Tagline -->
+    <text x="960" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#F8FAFC" text-anchor="middle" letter-spacing="-0.02em">
+      Sub-Second Conditional Escrow &amp; Ground-Truth Adjudication Protocol
+    </text>
+
+    <!-- Secondary Subtitle -->
+    <text x="960" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#94A3B8" text-anchor="middle">
+      The Trustless Settlement &amp; Anti-Hallucination Rail for Autonomous AI Machine-to-Machine Commerce
+    </text>
+  </g>
+
+  <!-- 3. The 3 Sponsor Architectural Pillars -->
+  <g transform="translate(0, 345)">
+    <!-- PILLAR 1: HEDERA -->
+    <g transform="translate(170, 0)">
+      <!-- Card Container -->
+      <rect width="480" height="340" rx="16" fill="url(#cardBg)" stroke="#1E293B" stroke-width="1.2" />
+      <rect x="0" y="336" width="480" height="4" rx="2" fill="#10B981" />
+
+      <!-- Pillar Header Pill -->
+      <rect x="28" y="28" width="160" height="32" rx="8" fill="#064E3B" stroke="#059669" stroke-width="1" />
+      <text x="108" y="49" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="12" font-weight="700" fill="#34D399" text-anchor="middle">🌿 HEDERA EVM &amp; HCS</text>
+
+      <!-- Title -->
+      <text x="28" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+        Sub-Second Escrow &amp; Audit
+      </text>
+
+      <!-- Bullet Points -->
+      <g transform="translate(28, 130)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#CBD5E1">
+        <text x="0" y="20" fill="#10B981" font-weight="bold">✓</text>
+        <text x="22" y="20"><tspan font-weight="600" fill="#FFFFFF">ArbiterEscrow.sol</tspan> on Hedera Chain ID 296</text>
+
+        <text x="0" y="56" fill="#10B981" font-weight="bold">✓</text>
+        <text x="22" y="56"><tspan font-weight="600" fill="#FFFFFF">0.84s Finality</tspan> for high-frequency micropayments</text>
+
+        <text x="0" y="92" fill="#10B981" font-weight="bold">✓</text>
+        <text x="22" y="92"><tspan font-weight="600" fill="#FFFFFF">Hedera Consensus Service</tspan> (Topic 0.0.10520952)</text>
+
+        <text x="0" y="128" fill="#10B981" font-weight="bold">✓</text>
+        <text x="22" y="128">Signed ECDSA cryptographic audit notary</text>
+
+        <text x="0" y="164" fill="#10B981" font-weight="bold">✓</text>
+        <text x="22" y="164"><tspan font-weight="600" fill="#FFFFFF">~$0.007 Gas</tspan> per dispute resolution</text>
+      </g>
+    </g>
+
+    <!-- Connector Arrow 1 -->
+    <g transform="translate(668, 160)" stroke="#334155" stroke-width="2" fill="none">
+      <line x1="0" y1="0" x2="30" y2="0" stroke-dasharray="4 4" />
+      <path d="M 22 -5 L 30 0 L 22 5" stroke="#64748B" />
+    </g>
+
+    <!-- PILLAR 2: THE GRAPH -->
+    <g transform="translate(720, 0)">
+      <!-- Card Container -->
+      <rect width="480" height="340" rx="16" fill="url(#cardBg)" stroke="#1E293B" stroke-width="1.2" />
+      <rect x="0" y="336" width="480" height="4" rx="2" fill="#6366F1" />
+
+      <!-- Pillar Header Pill -->
+      <rect x="28" y="28" width="160" height="32" rx="8" fill="#312E81" stroke="#4F46E5" stroke-width="1" />
+      <text x="108" y="49" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="12" font-weight="700" fill="#A5B4FC" text-anchor="middle">🟣 THE GRAPH ORACLE</text>
+
+      <!-- Title -->
+      <text x="28" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+        Ground-Truth Adjudication
+      </text>
+
+      <!-- Bullet Points -->
+      <g transform="translate(28, 130)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#CBD5E1">
+        <text x="0" y="20" fill="#818CF8" font-weight="bold">✓</text>
+        <text x="22" y="20"><tspan font-weight="600" fill="#FFFFFF">Decentralized Uniswap v3</tspan> Subgraph Indexing</text>
+
+        <text x="0" y="56" fill="#818CF8" font-weight="bold">✓</text>
+        <text x="22" y="56">Reconstructs raw onchain swap ticks deterministically</text>
+
+        <text x="0" y="92" fill="#818CF8" font-weight="bold">✓</text>
+        <text x="22" y="92"><tspan font-weight="600" fill="#FFFFFF">VWAP Mathematical Invariant</tspan> verification</text>
+
+        <text x="0" y="128" fill="#818CF8" font-weight="bold">✓</text>
+        <text x="22" y="128"><tspan font-weight="600" fill="#FFFFFF">Zero Hallucination</tspan> (Eliminates flawed LLM judges)</text>
+
+        <text x="0" y="164" fill="#818CF8" font-weight="bold">✓</text>
+        <text x="22" y="164">Defends against adversarial prompt injection</text>
+      </g>
+    </g>
+
+    <!-- Connector Arrow 2 -->
+    <g transform="translate(1218, 160)" stroke="#334155" stroke-width="2" fill="none">
+      <line x1="0" y1="0" x2="30" y2="0" stroke-dasharray="4 4" />
+      <path d="M 22 -5 L 30 0 L 22 5" stroke="#64748B" />
+    </g>
+
+    <!-- PILLAR 3: BAZANTIC -->
+    <g transform="translate(1270, 0)">
+      <!-- Card Container -->
+      <rect width="480" height="340" rx="16" fill="url(#cardBg)" stroke="#1E293B" stroke-width="1.2" />
+      <rect x="0" y="336" width="480" height="4" rx="2" fill="#F59E0B" />
+
+      <!-- Pillar Header Pill -->
+      <rect x="28" y="28" width="160" height="32" rx="8" fill="#78350F" stroke="#D97706" stroke-width="1" />
+      <text x="108" y="49" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="12" font-weight="700" fill="#FCD34D" text-anchor="middle">⚡ BAZANTIC MCP GATE</text>
+
+      <!-- Title -->
+      <text x="28" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+        Agent Tool Calling &amp; x402
+      </text>
+
+      <!-- Bullet Points -->
+      <g transform="translate(28, 130)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#CBD5E1">
+        <text x="0" y="20" fill="#FBBF24" font-weight="bold">✓</text>
+        <text x="22" y="20"><tspan font-weight="600" fill="#FFFFFF">Model Context Protocol (MCP)</tspan> Recipe Server</text>
+
+        <text x="0" y="56" fill="#FBBF24" font-weight="bold">✓</text>
+        <text x="22" y="56">Standardized tools for Claude, Cursor &amp; LangChain</text>
+
+        <text x="0" y="92" fill="#FBBF24" font-weight="bold">✓</text>
+        <text x="22" y="92"><tspan font-weight="600" fill="#FFFFFF">HTTP 402 Negotiation</tspan> (Payment-Required headers)</text>
+
+        <text x="0" y="128" fill="#FBBF24" font-weight="bold">✓</text>
+        <text x="22" y="128"><tspan font-weight="600" fill="#FFFFFF">ERC-8004 Registry</tspan> (Contract ID 0.0.10520278)</text>
+
+        <text x="0" y="164" fill="#FBBF24" font-weight="bold">✓</text>
+        <text x="22" y="164">Autonomous onchain reputation slashing (-50 pts)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 4. Protocol Performance Metrics Row -->
+  <g transform="translate(170, 725)">
+    <!-- Metric 1: Finality -->
+    <g transform="translate(0, 0)">
+      <rect width="360" height="100" rx="14" fill="#0B1120" stroke="#1E293B" stroke-width="1.2" />
+      <text x="24" y="30" font-family="'SF Mono', Menlo, monospace" font-size="11" font-weight="700" fill="#10B981" letter-spacing="0.05em">⚡ RESOLUTION FINALITY</text>
+      <text x="24" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">0.84 Seconds</text>
+      <text x="24" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748B">Hedera EVM Sub-Second Execution</text>
+    </g>
+
+    <!-- Metric 2: Adjudication -->
+    <g transform="translate(400, 0)">
+      <rect width="360" height="100" rx="14" fill="#0B1120" stroke="#1E293B" stroke-width="1.2" />
+      <text x="24" y="30" font-family="'SF Mono', Menlo, monospace" font-size="11" font-weight="700" fill="#818CF8" letter-spacing="0.05em">🛡️ GROUND-TRUTH ACCURACY</text>
+      <text x="24" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">100% Deterministic</text>
+      <text x="24" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748B">The Graph Decentralized Subgraphs</text>
+    </g>
+
+    <!-- Metric 3: Gas Cost -->
+    <g transform="translate(800, 0)">
+      <rect width="360" height="100" rx="14" fill="#0B1120" stroke="#1E293B" stroke-width="1.2" />
+      <text x="24" y="30" font-family="'SF Mono', Menlo, monospace" font-size="11" font-weight="700" fill="#34D399" letter-spacing="0.05em">💰 SETTLEMENT GAS COST</text>
+      <text x="24" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">~$0.007 USD</text>
+      <text x="24" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748B">Viable for High-Frequency Tasks</text>
+    </g>
+
+    <!-- Metric 4: Slashing -->
+    <g transform="translate(1200, 0)">
+      <rect width="380" height="100" rx="14" fill="#0B1120" stroke="#1E293B" stroke-width="1.2" />
+      <text x="24" y="30" font-family="'SF Mono', Menlo, monospace" font-size="11" font-weight="700" fill="#F87171" letter-spacing="0.05em">🤖 AGENT ACCOUNTABILITY</text>
+      <text x="24" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">ERC-8004 Slashing</text>
+      <text x="24" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748B">Automatic -50 Pts Rogue Penalty</text>
+    </g>
+  </g>
+
+  <!-- 5. Footer & Verification Proofs -->
+  <g transform="translate(0, 920)">
+    <line x1="170" y1="0" x2="1750" y2="0" stroke="#1E293B" stroke-width="1" />
+    
+    <text x="170" y="45" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="14" fill="#94A3B8">
+      CONTRACTS: <tspan fill="#FFFFFF" font-weight="600">ArbiterEscrow.sol (0.0.10520281)</tspan> • <tspan fill="#FFFFFF" font-weight="600">ERC8004ReputationRegistry.sol (0.0.10520278)</tspan> • <tspan fill="#34D399">100% Sourcify Exact Match</tspan>
+    </text>
+
+    <text x="1750" y="45" font-family="'SF Mono', Menlo, Consolas, Monaco, monospace" font-size="14" fill="#64748B" text-anchor="end">
+      HEDERA TESTNET (CHAIN ID 296) • ETHONLINE 2026
+    </text>
+  </g>
+</svg>
