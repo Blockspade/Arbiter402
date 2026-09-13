@@ -210,7 +210,7 @@ sequenceDiagram
     participant HCS as Hedera Consensus Service
     participant Registry as ERC-8004 Registry
 
-    Buyer->>Escrow: createJob(seller, specHash, duration) + 1.0 HBAR
+    Buyer->>Escrow: createJob(seller, specHash, duration) + 0.5 HBAR
     Escrow-->>Buyer: Job Created (Status: CREATED)
     Seller->>Escrow: submitDelivery(jobId, resultHash, deliveryUri)
     Escrow-->>Seller: Delivery Committed (Status: DELIVERED, Window Starts)
@@ -224,7 +224,7 @@ sequenceDiagram
     Referee->>HCS: Anchor Signed ECDSA Audit Proof (Topic 0.0.10520952)
     HCS-->>Referee: Consensus Confirmed (Seq Number, Timestamp)
     Referee->>Escrow: resolveDispute(jobId, sellerWon=false, hcsAuditUri)
-    Escrow->>Buyer: Atomic 100% Refund (1.0 HBAR)
+    Escrow->>Buyer: Atomic 100% Refund (0.5 HBAR)
     Escrow->>Registry: logFeedback(seller, -50, "Ground-truth deviation slashed")
     Registry-->>Seller: Trust Score: 100 -> 50 pts (Status: SLASHED)
 ```

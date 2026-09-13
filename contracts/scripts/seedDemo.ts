@@ -52,10 +52,10 @@ async function main() {
   console.log("💸 Funding Agent Wallets from Main Account...");
   const fundBuyerTx = await refereeSigner.sendTransaction({
     to: buyerWallet.address,
-    value: ethers.parseEther("3.0"), // 1 HBAR for escrow deposit + 2 HBAR for gas
+    value: ethers.parseEther("2.5"), // 0.5 HBAR for escrow deposit + 2 HBAR for gas
   });
   await fundBuyerTx.wait();
-  console.log(`   ✅ Sent 3.0 HBAR to Buyer Agent (Tx: ${fundBuyerTx.hash.slice(0, 14)}...)`);
+  console.log(`   ✅ Sent 2.5 HBAR to Buyer Agent (Tx: ${fundBuyerTx.hash.slice(0, 14)}...)`);
 
   const fundSellerTx = await refereeSigner.sendTransaction({
     to: sellerWallet.address,
@@ -77,10 +77,10 @@ async function main() {
   // STEP 1: Buyer Locks Escrow on Hedera EVM
   // =========================================================================
   console.log("-----------------------------------------------------------------------");
-  console.log("🔒 STEP 1: BUYER LOCKS 1.0 HBAR CONDITIONAL ESCROW ON HEDERA TESTNET");
+  console.log("🔒 STEP 1: BUYER LOCKS 0.5 HBAR CONDITIONAL ESCROW ON HEDERA TESTNET");
   console.log("-----------------------------------------------------------------------");
   const spec = buyer.createJobSpec(1);
-  const jobId = await buyer.lockEscrow(sellerWallet.address, spec, "1.0");
+  const jobId = await buyer.lockEscrow(sellerWallet.address, spec, "0.5");
   spec.jobId = jobId;
   console.log(`   • Job #${jobId} confirmed locked in ArbiterEscrow.sol vault on Hedera EVM.`);
   await sleep(1500);
